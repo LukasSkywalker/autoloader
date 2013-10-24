@@ -11,6 +11,10 @@ module Autoloader
         def action_name
             @controller.action_name
         end
+        
+        def identifier
+            @params[@opts[:identifier]]
+        end
 
         def load_resource
             if load_instance?
@@ -29,7 +33,7 @@ module Autoloader
         end
         
         def member_action?
-            new_actions.include?(action_name.to_sym) || @params[:id]
+            new_actions.include?(action_name.to_sym) || identifier
         end
         
         def collection_actions
@@ -44,7 +48,7 @@ module Autoloader
             if new_actions.include?(action_name.to_sym)
                 Rails.logger.info('build_resource')
                 build_resource
-            elsif @params[:id]
+            elsif identifier
                 Rails.logger.info('find_resource')
                 find_resource
                 update_resource if action_name == 'update'
@@ -53,7 +57,7 @@ module Autoloader
         
         def update_resource
             Rails.logger.info('updating for ' + @klass.name)
-            @resource.update_attributes(@model_params)
+            @resource.assign_attributes(@model_params)
         end
         
         def load_collection
@@ -68,7 +72,7 @@ module Autoloader
         
         def find_resource
             Rails.logger.info('finding for ' + @klass.name)
-            @resource = @klass.find(@params[@opts[:identifier]])
+            @resource = @klass.find(identifier)
         end
     end
     
