@@ -8,12 +8,13 @@ module Autoloader
             klass = Kernel.const_get(name.to_s.classify)
             
             opts = {
-                :scope => klass,
+                :scope => Proc.new { klass },
                 :identifier => :id
             }.merge(args.extract_options! || {})
             
             self.send(:append_before_filter, opts.slice(:except, :only)) do |controller|
-                rl = ResourceLoader.new(controller.action_name, params, opts)
+                scp = instance_exec(&opts[:scope])
+                rl = ResourceLoader.new(controller, params, opts, scp)
                 instance_variable_set(('@'+name.to_s).to_sym, rl.load_resource)
             end
         end

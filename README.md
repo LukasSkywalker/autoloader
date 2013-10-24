@@ -23,7 +23,7 @@ Here is an example:
 
 ```
 class SampleController < ApplicationController
-  autoload :sample, :scope => { current_user.current_organization }, :except => :other_action # note: the scope option does not currently work.
+  autoload :sample, :scope => { current_user.current_organization.samples }, :except => :other_action # note: the scope option does not currently work.
 
   def index
     # @samples is available
@@ -61,7 +61,7 @@ Options are
     
         autoload :user, :except => :destroy
         
-    :scope (Proc) _IN PROGRESS_ the scope in which to search the record. Default: Model class
+    :scope (Proc) the scope in which to search the record. Default: Model class
     
         autoload :user, :scope => Proc.new { User.administrators }
         # Produces User.administrators.find(#)
