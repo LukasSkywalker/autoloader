@@ -62,7 +62,7 @@ module Autoloader
         
         def load_collection
             Rails.logger.info('loading for ' + @klass.name)
-            @resource = @klass.all
+            @resource = @klass
         end
         
         def build_resource
