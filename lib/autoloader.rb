@@ -15,7 +15,8 @@ module Autoloader
             self.send(:append_before_filter, opts.slice(:except, :only)) do |controller|
                 scp = instance_exec(&opts[:scope])
                 rl = ResourceLoader.new(controller, params, opts, scp)
-                name = name.pluralize if controller.action_name == 'index'
+                name = name.to_s.pluralize if controller.action_name == 'index'
+                Rails.logger.info('Assigning ' + name)
                 instance_variable_set(('@'+name.to_s).to_sym, rl.load_resource)
             end
         end
