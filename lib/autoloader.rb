@@ -16,7 +16,7 @@ module Autoloader
                 scp = instance_exec(&opts[:scope])
                 rl = ResourceLoader.new(controller, params, opts, scp)
                 name = name.to_s.pluralize if controller.action_name == 'index'
-                Rails.logger.info('Assigning ' + name)
+                Rails.logger.info('Assigning @' + name.to_s)
                 instance_variable_set(('@'+name.to_s).to_sym, rl.load_resource)
             end
         end
