@@ -6,15 +6,16 @@ DRY up your controllers by autoloading the used models with AutoLoader. With Aut
 
 Add this line to your application's Gemfile:
 
-    gem 'autoloader'
+    gem 'autoloader', :git => 'https://bitbucket.org/musicspot/autoloader'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
-Or install it yourself as:
 
-    $ gem install autoloader
+## Beta note
+_Autoloader is still in beta and not available on rubygems.org yet. We will publish it there as soon as it's a bit stable. Please don't use it in production yet and expect the API to change a tiny bit in the future._
+
 
 ## Usage
 
@@ -28,19 +29,19 @@ Options are
     
     :identifier (Symbol) which param to use to find the record. Default: :id
     
-        autoload :user, :identifier => :member_id
+        autoload_resource :user, :identifier => :member_id
         
     :only (Symbol) on which controller actions the record should be loaded
     
-        autoload :user, :only => [:show, :index]
+        autoload_resource :user, :only => [:show, :index]
         
     :except (Symbol) on which actions to skip loading
     
-        autoload :user, :except => :destroy
+        autoload_resource :user, :except => :destroy
         
     :scope (Proc) the scope in which to search the record. Default: Model class
     
-        autoload :user, :scope => Proc.new { User.administrators }
+        autoload_resource :user, :scope => Proc.new { User.administrators }
         # Produces User.administrators.find(#)
         
 ## Example
@@ -57,7 +58,7 @@ class PostController < ApplicationController
 
   def show
     # @post is available
-    @comments = @sample.comments
+    @comments = @post.comments
   end
 
   def create
@@ -124,7 +125,8 @@ class GroupsController < ApplicationController
 end
 
 ```
-    
+## Help me!
+If you need help, use either the [issue tracker](https://bitbucket.org/musicspot/autoloader/issues) or Twitter ([@LukasSkywalker](https://twitter.com/LukasSkywalker)).  
 
 ## Contributing
 
