@@ -1,9 +1,9 @@
 module Autoloader
   class PermissionFinder
-    def self.search(klass, action, user, record)
+    def self.search(klass, action, user, record, plural, permission)
       permission_name = klass.name + 'Permission'
       if self.class_exists?(permission_name.to_s)
-        permission = Kernel.const_get(permission_name.to_s)
+        permission ||= Kernel.const_get(permission_name.to_s)
       else
         raise MissingPermission.new('No permission found for ' + klass.name)
       end
@@ -15,7 +15,7 @@ module Autoloader
       end
 
       if result
-        if action == :index
+        if plural
           return result
         else
           return record

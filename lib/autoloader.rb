@@ -24,7 +24,7 @@ module Autoloader
         scp = instance_exec(&opts[:scope])
         rl = ResourceLoader.new(controller, params, opts, scp)
         var_name = name.to_s
-        var_name = name.to_s.pluralize if controller.action_name == 'index'
+        var_name = name.to_s.pluralize if rl.plural?
         instance_variable_set(('@'+var_name.to_s).to_sym, rl.load_resource)
       end
     end

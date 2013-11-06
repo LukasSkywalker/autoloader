@@ -7,7 +7,27 @@ module Autoloader
       @klass = scope
       @model_params = params[@klass.name.underscore.to_sym]
       @user = controller.instance_exec(&Autoloader.user_method)
+      @permission = opts[:permission]
     end
+
+    def load_resource
+      if singular?
+        load_resource_instance
+      else
+        load_collection
+      end
+      Autoloader::PermissionFinder.search(@klass, action_name.to_sym, @user, @resource, self.plural?, @permission)
+    end
+
+    def singular?
+      new_actions.include?(action_name.to_sym) || identifier
+    end
+
+    def plural?
+      !self.singular?
+    end
+
+    protected
 
     def action_name
       @controller.action_name
@@ -15,24 +35,6 @@ module Autoloader
 
     def identifier
       @params[@opts[:identifier]]
-    end
-
-    def load_resource
-      if load_instance?
-        load_resource_instance
-      else
-        load_collection
-      end
-      Autoloader::PermissionFinder.search(@klass, action_name.to_sym, @user, @resource)
-    end
-
-    protected
-    def load_instance?
-      member_action?
-    end
-
-    def member_action?
-      new_actions.include?(action_name.to_sym) || identifier
     end
 
     def collection_actions
