@@ -22,6 +22,21 @@ module Autoloader
       end
     end
 
+    def allowed?
+      guest_method = 'guest_' + action.to_s
+      if guest
+        if self.respond_to? guest_method
+          result = self.send(guest_method)
+        else
+          result = false
+        end
+      else
+        result = self.send(action)
+      end
+      return result if result == true || result == false
+      return (!result.respond_to?(:each) || !result.empty?)
+    end
+
     def defined?
       Rails.logger.warn(guest)
       if guest
