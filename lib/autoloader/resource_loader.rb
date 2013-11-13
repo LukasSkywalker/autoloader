@@ -6,7 +6,7 @@ module Autoloader
       @opts = opts
       @klass = scope
       @model_params = params[@klass.name.underscore.to_sym]
-      @user = controller.instance_exec(&Autoloader.user_method)
+      @user = controller.instance_exec(&opts[:user_method])
       @permission = opts[:permission]
     end
 

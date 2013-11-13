@@ -8,8 +8,8 @@ module Autoloader
         raise MissingPermission.new('No permission found for ' + klass.name)
       end
 
-      if permission.new.respond_to?(action.to_sym)
-        result = permission.new.send(action.to_sym, user, record)
+      if permission.new(user, action, record).defined?
+        result = permission.new(user, action, record).find
       else
         raise MissingAction.new('Permission for action ' + action.to_s + ' could not be found in ' + permission_name)
       end

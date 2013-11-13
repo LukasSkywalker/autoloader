@@ -17,7 +17,8 @@ module Autoloader
 
       opts = {
         :scope => Proc.new { klass },
-        :identifier => :id
+        :identifier => :id,
+        :user_method => Autoloader.user_method
       }.merge(args.extract_options! || {})
 
       self.send(:append_before_filter, opts.slice(:except, :only)) do |controller|
