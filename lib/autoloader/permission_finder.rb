@@ -16,6 +16,7 @@ module Autoloader
 
       if result
         if plural
+          return record.all if result == true
           return result
         else
           return record
